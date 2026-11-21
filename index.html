@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battery Level</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100dvh;
+      display: grid;
+      place-items: center;
+      background: #17191b;
+      color: white;
+      font-family: system-ui, sans-serif;
+    }
+    #battery {
+      font-size: clamp(100px, 25vw, 180px);
+      font-weight: 600;
+      letter-spacing: -8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="battery">--%</div>
+
+  <script>
+    async function showBattery() {
+      if (!navigator.getBattery) {
+        document.getElementById("battery").textContent = "N/A";
+        return;
+      }
+
+      const battery = await navigator.getBattery();
+
+      function update() {
+        document.getElementById("battery").textContent =
+          Math.round(battery.level * 100) + "%";
+      }
+
+      update();
+      battery.addEventListener("levelchange", update);
+    }
+
+    showBattery().catch(() => {
+      document.getElementById("battery").textContent = "N/A";
+    });
+  </script>
+</body>
+</html>
